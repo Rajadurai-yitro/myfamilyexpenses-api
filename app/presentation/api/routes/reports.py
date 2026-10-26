@@ -61,6 +61,7 @@ def get_summary_report(
                 payment_mode=e.payment_mode,
                 transaction_id=e.transaction_id,
                 online_payment_type=e.online_payment_type,
+                tag=e.tag,
                 receipt_url=(
                     f"/api/v1/expenses/{e.id}/receipt" if e.receipt_path else None
                 ),

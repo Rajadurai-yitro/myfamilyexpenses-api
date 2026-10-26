@@ -30,6 +30,7 @@ class CreateExpenseUseCase:
         payment_mode: str = "cash",
         transaction_id: Optional[str] = None,
         online_payment_type: Optional[str] = None,
+        tag: Optional[str] = None,
     ) -> Expense:
         if amount <= Decimal("0.00"):
             raise ValidationException("Expense amount must be greater than zero")
@@ -56,6 +57,7 @@ class CreateExpenseUseCase:
             payment_mode=mode,
             transaction_id=txn,
             online_payment_type=online_type,
+            tag=_normalize_tag(tag),
         )
         return self.expense_repo.create(expense)
 
@@ -117,6 +119,8 @@ class UpdateExpenseUseCase:
         payment_mode: Optional[str] = None,
         transaction_id: Optional[str] = None,
         online_payment_type: Optional[str] = None,
+        tag: Optional[str] = None,
+        update_tag: bool = False,
     ) -> Expense:
         expense = self.expense_repo.get_by_id(expense_id)
         if not expense:
@@ -152,6 +156,9 @@ class UpdateExpenseUseCase:
             expense.transaction_id = txn
             expense.online_payment_type = online_type
 
+        if update_tag:
+            expense.tag = _normalize_tag(tag)
+
         return self.expense_repo.update(expense)
 
 
@@ -171,8 +178,29 @@ class DeleteExpenseUseCase:
         return self.expense_repo.delete(expense_id)
 
 
+_TAGS = {
+    "personal",
+    "family",
+    "friends",
+    "online",
+    "office",
+    "travel",
+    "health",
+    "shopping",
+}
 _PAYMENT_MODES = {"cash", "online"}
 _ONLINE_TYPES = {"upi", "neft", "card", "net_banking", "other"}
+
+
+def _normalize_tag(tag: Optional[str]) -> Optional[str]:
+    if tag is None:
+        return None
+    value = tag.strip().lower()
+    if not value:
+        return None
+    if value not in _TAGS:
+        raise ValidationException("Choose a tag")
+    return value
 
 
 def _normalize_payment(
@@ -185,12 +213,12 @@ def _normalize_payment(
         raise ValidationException("payment_mode must be cash or online")
     if mode == "cash":
         return "cash", None, None
-    txn = (transaction_id or "").strip()
+    txn = (transaction_id or "").strip() or None
     online_type = (online_payment_type or "").strip().lower()
-    if not txn:
-        raise ValidationException("Transaction ID is required for online payments")
-    if len(txn) > 100:
+    if txn and len(txn) > 100:
         raise ValidationException("Transaction ID must be 100 characters or fewer")
+    if not online_type:
+        return mode, txn, None
     if online_type not in _ONLINE_TYPES:
         raise ValidationException("Choose an online payment type")
     return mode, txn, online_type

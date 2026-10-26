@@ -31,6 +31,7 @@ def test_expense_crud(client):
     expense_id = expense_data["id"]
     assert expense_data["amount"] == 250.50
     assert expense_data["description"] == "Lunch with family"
+    assert expense_data["created_at"].endswith("Z")
 
     # 2. Get Expense by ID
     get_res = client.get(f"/api/v1/expenses/{expense_id}", headers=headers)
@@ -129,7 +130,7 @@ def test_credit_income_and_bill(client):
 def test_payment_mode_and_new_categories(client):
     categories = client.post("/api/v1/categories/seed").json()
     keys = {item["name_key"] for item in categories}
-    assert {"maintenance", "vegetables", "fruits", "entertainment"} <= keys
+    assert {"maintenance", "vegetables", "fruits", "entertainment", "flower"} <= keys
     food = next(item for item in categories if item["name_key"] == "food")
 
     reg = client.post(
@@ -150,7 +151,9 @@ def test_payment_mode_and_new_categories(client):
             "online_payment_type": "upi",
         },
     )
-    assert missing_txn.status_code == 422
+    assert missing_txn.status_code == 201
+    assert missing_txn.json()["transaction_id"] is None
+    assert missing_txn.json()["online_payment_type"] == "upi"
 
     created = client.post(
         "/api/v1/expenses",

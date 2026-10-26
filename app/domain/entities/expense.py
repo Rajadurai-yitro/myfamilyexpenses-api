@@ -20,6 +20,7 @@ class Expense:
     payment_mode: str = "cash"
     transaction_id: Optional[str] = None
     online_payment_type: Optional[str] = None
+    tag: Optional[str] = None
 
     def __post_init__(self):
         if self.amount <= Decimal("0.00"):
@@ -37,6 +38,7 @@ class Expense:
         payment_mode: str = "cash",
         transaction_id: Optional[str] = None,
         online_payment_type: Optional[str] = None,
+        tag: Optional[str] = None,
     ) -> "Expense":
         now = datetime.utcnow()
         return cls(
@@ -50,6 +52,7 @@ class Expense:
             payment_mode=payment_mode,
             transaction_id=transaction_id,
             online_payment_type=online_payment_type,
+            tag=tag,
             created_at=now,
             updated_at=now,
         )

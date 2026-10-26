@@ -13,6 +13,9 @@ from app.infrastructure.database.repositories.sqlalchemy_category_repo import (
 from app.infrastructure.database.repositories.sqlalchemy_expense_repo import (
     SqlAlchemyExpenseRepository,
 )
+from app.infrastructure.database.repositories.sqlalchemy_group_repo import (
+    SqlAlchemyGroupRepository,
+)
 from app.infrastructure.database.repositories.sqlalchemy_user_repo import (
     SqlAlchemyUserRepository,
 )
@@ -31,6 +34,10 @@ def get_category_repository(db: Session = Depends(get_db)) -> SqlAlchemyCategory
 
 def get_expense_repository(db: Session = Depends(get_db)) -> SqlAlchemyExpenseRepository:
     return SqlAlchemyExpenseRepository(db)
+
+
+def get_group_repository(db: Session = Depends(get_db)) -> SqlAlchemyGroupRepository:
+    return SqlAlchemyGroupRepository(db)
 
 
 def get_current_user(

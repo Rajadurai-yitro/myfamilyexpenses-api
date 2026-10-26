@@ -55,6 +55,7 @@ def _expense_response(expense: Expense) -> ExpenseResponse:
         payment_mode=expense.payment_mode,
         transaction_id=expense.transaction_id,
         online_payment_type=expense.online_payment_type,
+        tag=expense.tag,
         receipt_url=receipt_url,
         created_at=expense.created_at,
         updated_at=expense.updated_at,
@@ -79,6 +80,7 @@ def create_expense(
         payment_mode=req.payment_mode,
         transaction_id=req.transaction_id,
         online_payment_type=req.online_payment_type,
+        tag=req.tag,
     )
     return _expense_response(expense)
 
@@ -138,6 +140,8 @@ def update_expense(
         payment_mode=req.payment_mode,
         transaction_id=req.transaction_id,
         online_payment_type=req.online_payment_type,
+        tag=req.tag,
+        update_tag="tag" in req.model_fields_set,
     )
     return _expense_response(expense)
 

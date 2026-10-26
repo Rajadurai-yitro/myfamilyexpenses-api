@@ -29,6 +29,7 @@ class ExpenseModel(Base):
     payment_mode = Column(String(20), nullable=False, default="cash")
     transaction_id = Column(String(100), nullable=True)
     online_payment_type = Column(String(30), nullable=True)
+    tag = Column(String(30), nullable=True)
     expense_date = Column(Date, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)

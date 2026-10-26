@@ -14,6 +14,15 @@ from app.infrastructure.database.models.token_model import (
     PasswordResetTokenModel,
     RefreshTokenModel,
 )
+from app.infrastructure.database.models.group_models import (  # noqa: F401
+    ExpenseGroupModel,
+    ExpenseSettlementModel,
+    ExpenseShareModel,
+    GroupAuditEventModel,
+    GroupExpenseModel,
+    GroupInvitationModel,
+    GroupMembershipModel,
+)
 
 # Render and older platforms might provide postgres:// which SQLAlchemy 2.0 requires to be postgresql://
 database_url = settings.DATABASE_URL
@@ -74,6 +83,7 @@ def init_db():
         "online_payment_type",
         "online_payment_type VARCHAR(30)",
     )
+    _add_column_if_missing("expenses", "tag", "tag VARCHAR(30)")
     _add_column_if_missing("users", "avatar_path", "avatar_path VARCHAR(255)")
     _add_column_if_missing(
         "user_settings",

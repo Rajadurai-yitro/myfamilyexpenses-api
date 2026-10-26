@@ -10,6 +10,15 @@ from app.infrastructure.database.models.category_model import CategoryModel
 from app.infrastructure.database.models.expense_model import ExpenseModel
 from app.infrastructure.database.models.settings_model import UserSettingsModel
 from app.infrastructure.database.models.token_model import RefreshTokenModel, PasswordResetTokenModel
+from app.infrastructure.database.models.group_models import (  # noqa: F401
+    ExpenseGroupModel,
+    ExpenseSettlementModel,
+    ExpenseShareModel,
+    GroupAuditEventModel,
+    GroupExpenseModel,
+    GroupInvitationModel,
+    GroupMembershipModel,
+)
 
 config = context.config
 

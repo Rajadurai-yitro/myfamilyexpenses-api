@@ -30,6 +30,7 @@ class SqlAlchemyExpenseRepository(ExpenseRepository):
             payment_mode=model.payment_mode or "cash",
             transaction_id=model.transaction_id,
             online_payment_type=model.online_payment_type,
+            tag=model.tag,
         )
 
     def create(self, expense: Expense) -> Expense:
@@ -44,6 +45,7 @@ class SqlAlchemyExpenseRepository(ExpenseRepository):
             payment_mode=expense.payment_mode,
             transaction_id=expense.transaction_id,
             online_payment_type=expense.online_payment_type,
+            tag=expense.tag,
             expense_date=expense.expense_date,
             created_at=expense.created_at,
             updated_at=expense.updated_at,
@@ -99,6 +101,7 @@ class SqlAlchemyExpenseRepository(ExpenseRepository):
         model.payment_mode = expense.payment_mode
         model.transaction_id = expense.transaction_id
         model.online_payment_type = expense.online_payment_type
+        model.tag = expense.tag
         model.expense_date = expense.expense_date
         model.updated_at = datetime.utcnow()
         self.db.commit()

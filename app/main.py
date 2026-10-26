@@ -16,6 +16,7 @@ from app.presentation.api.routes import (
     categories,
     expenses,
     exports,
+    groups,
     health,
     reports,
     users,
@@ -90,6 +91,7 @@ def create_app() -> FastAPI:
     app.include_router(reports.router)
     app.include_router(exports.router)
     app.include_router(users.router)
+    app.include_router(groups.router)
 
     return app
 
